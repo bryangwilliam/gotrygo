@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gotrygo-deployment
+  labels:
+    app: gotrygo
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: gotrygo
+  template:
+    metadata:
+      labels:
+        app: gotrygo
+    spec:
+      containers:
+      - name: gotrygo-app
+        image: bryangwilliam/gotrygo:2
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gotrygo-loadbalancer
+  labels:
+    app: gotrygo
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: gotrygo
+  type: LoadBalancer
